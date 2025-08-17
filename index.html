@@ -1,196 +1,297 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <title>Форма перевіdcdcdcwcccrності</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(120deg, #0f0c29, #302b63, #24243e);
-            color: #ECECEC;
-            font-family: Arial, sans-serif;
-        }
-        #quiz, #result {
-            max-width: 800px;
-            margin: 30px auto;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 20px 30px;
-            border: 1px solid #444;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
-        h1 {
-            color: #9a70f5;
-            text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #555;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        h2 {
-            color: #FFDE59;
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .question {
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #444;
-        }
-        .question:last-child {
-            border-bottom: none;
-        }
-        .question h3 {
-            margin: 0 0 10px 0;
-            font-size: 16px;
-        }
-        .options label {
-            display: block;
-            margin-bottom: 5px;
-            cursor: pointer;
-        }
-        input[type="radio"] {
-            margin-right: 8px;
-        }
-        #submit-btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background: #9a70f5;
-            color: #fff;
-            border: none;
-            font-size: 16px;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-        #submit-btn:hover {
-            background: #7b4dd5;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Антиутопічні міні-ігри</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+body {
+    background: linear-gradient(135deg, #000000, #000044, #440077);
+    background-size: cover;
+    color: #ECECEC;
+    font-family: sans-serif;
+}
+.screen {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+.screen.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+h1 {
+    color: #FFDE59;
+    margin-bottom: 20px;
+}
+button {
+    background-color: #9a70f5;
+    color: #ECECEC;
+    border: 2px solid #9a70f5;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    cursor: pointer;
+    margin: 5px;
+}
+button:hover {
+    background-color: #FFDE59;
+    color: #000;
+}
+#game1-grid {
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+#game1-grid td {
+    width: 20px; height: 20px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #333;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+#game1-grid td:hover {
+    background-color: rgba(255, 222, 89, 0.2);
+}
+.emoji-grid {
+    display: grid;
+    gap: 10px;
+    justify-items: center;
+}
+.emoji-grid span {
+    font-size: 2rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.emoji-grid span:hover {
+    transform: scale(1.2);
+}
+.message {
+    margin-top: 20px;
+    font-size: 1.3em;
+    color: #FFDE59;
+}
+</style>
 </head>
 <body>
-<div id="quiz">
-    <h1>Форма перевірки психологічної придатності громадянина до служби Новому Порядку</h1>
-    <form id="loyalty-test">
-        <div class="question">
-            <h3>1. Чи вважаєте Ви відданість ідеям Нового Порядку Вашим обов'язком перед Батьківщиною?</h3>
-            <div class="options">
-                <label><input type="radio" name="q1" value="2">Так, це мій священний обов'язок.</label>
-                <label><input type="radio" name="q1" value="1">Так, але у мене є деякі застереження.</label>
-                <label><input type="radio" name="q1" value="0">Ні, я ставлю це під сумнів.</label>
-            </div>
-        </div>
-        <div class="question">
-            <h3>2. Чи повідомляли Ви компетентним органам про виявлені випадки підривної діяльності або недотримання ідеологічних норм?</h3>
-            <div class="options">
-                <label><input type="radio" name="q2" value="2">Так, завжди повідомляю про будь-яку підозрілу активність.</label>
-                <label><input type="radio" name="q2" value="1">Тільки якщо немає іншого виходу.</label>
-                <label><input type="radio" name="q2" value="0">Ні, це не моя справа.</label>
-            </div>
-        </div>
-        <div class="question">
-            <h3>3. Чи вваsssssssssssssssss інтереси держави?</h3>
-            <div class="options">
-                <label><input type="radio" name="q3" value="2">Ні, особисте повинне поступатися державним інтересам.</label>
-                <label><input type="radio" name="q3" value="1">Часом, але в цілому інтереси держави важливіші.</label>
-                <label><input type="radio" name="q3" value="0">Так, кожен сам за себе.</label>
-            </div>
-        </div>
-        <div class="question">
-            <h3>4. Чи потрібно суворо карати тих, хто відкрито критикує владу Нового Порядку?</h3>
-            <div class="options">
-                <label><input type="radio" name="q4" value="2">Так, це зрада Батьківщини і має жорстко каратися.</label>
-                <label><input type="radio" name="q4" value="1">Потрібна перевірка та профілактичні бесіди.</label>
-                <label><input type="radio" name="q4" value="0">Ні, свобода думки повинна бути.</label>
-            </div>
-        </div>
-        <div class="question">
-            <h3>5. Чи брали Ви участь в урочистих заходах чи мітингах на підтримку лідера та ідеології Нового Порядку?</h3>
-            <div class="options">
-                <label><input type="radio" name="q5" value="2">Так, регулярно.</label>
-                <label><input type="radio" name="q5" value="1">Декілька разів, коли доводилося.</label>
-                <label><input type="radio" name="q5" value="0">Ні, ніколи.</label>
-            </div>
-        </div>
-        <div class="question">
-            <h3>6. Чи приймаєте Ви цілковиту інформаційну лінію державних ЗМІ за базову правду?</h3>
-            <div class="options">
-                <label><input type="radio" name="q6" value="2">Так, офіційні джерела завжди правдиві.</label>
-                <label><input type="radio" name="q6" value="1">Переважно так, з деякою обережністю.</label>
-                <label><input type="radio" name="q6" value="0">Ні, ЗМІ - пропаганда.</label>
-            </div>
-        </div>
-        <div class="question">
-            <h3>7. Чи допоможете Ви у виконанні плану трудової мобілізації за наказом влади?</h3>
-            <div class="options">
-                <label><input type="radio" name="q7" value="2">Так, негайно приступлю до роботи.</label>
-                <label><input type="radio" name="q7" value="1">За умови належної підготовки та згоди.</label>
-                <label><input type="radio" name="q7" value="0">Виконувати не буду.</label>
-            </div>
-        </div>
-        <div class="question">
-            <h3>8. Як би Ви відреагували, якщо б знайомий закликав Вас до організації непокори чи руху опору?</h3>
-            <div class="options">
-                <label><input type="radio" name="q8" value="2">Повідомлю про це у відповідні органи.</label>
-                <label><input type="radio" name="q8" value="1">Ввічливо відмовлюся.</label>
-                <label><input type="radio" name="q8" value="0">Приєднаюсь до руху опору.</label>
-            </div>
-        </div>
-        <div class="question">
-            <h3>9. Чи погоджуєтеся Ви з тим, що людину слід оцінювати за її поведінкою та підтримкою системи Нового Порядку?</h3>
-            <div class="options">
-                <label><input type="radio" name="q9" value="2">Так, вірність режиму є головним критерієм.</label>
-                <label><input type="radio" name="q9" value="1">Частково так, але і особисті якості важливі.</label>
-                <label><input type="radio" name="q9" value="0">Ні, кожен має право на власну позицію.</label>
-            </div>
-        </div>
-        <div class="question">
-            <h3>10. Чи підтримуєте Ви політику тотального контролю і дисципліни в усіх сферах життя заради безпеки держави?</h3>
-            <div class="options">
-                <label><input type="radio" name="q10" value="2">Так, це запорука нашого благополуччя.</label>
-                <label><input type="radio" name="q10" value="1">Так, але з м'якими винятками.</label>
-                <label><input type="radio" name="q10" value="0">Ні, це порушує права людини.</label>
-            </div>
-        </div>
-        <button type="button" id="submit-btn">Підібрати результат</button>
-    </form>
+<div id="screen-start" class="screen active">
+    <h1>Антиутопічні випробування</h1>
+    <button id="start-btn">Почати</button>
 </div>
-<div id="result" style="display:none;">
-    <!-- Результат буде відображено тут -->
+
+<div id="screen-game1" class="screen">
+    <div id="game1-grid-container">
+        <table id="game1-grid"></table>
+    </div>
+    <div id="game1-message" class="message" style="display:none;">
+        Ви знайшли заборонене слово.
+        <br><button id="game1-next-btn">Продовжити</button>
+    </div>
+</div>
+
+<div id="screen-game2" class="screen">
+    <div id="game2-grid-container">
+        <div id="game2-emojis" class="emoji-grid" style="grid-template-columns: repeat(4, 1fr);"></div>
+    </div>
+    <div id="game2-message" class="message" style="display:none;">
+        <span id="game2-result-text"></span>
+        <br><button id="game2-next-btn">Продовжити</button>
+    </div>
+</div>
+
+<div id="screen-game3" class="screen">
+    <div id="game3-grid-container">
+        <div id="game3-emojis" class="emoji-grid" style="grid-template-columns: repeat(6, 1fr);"></div>
+    </div>
+    <div id="game3-message" class="message" style="display:none;">
+        Ви побачили те, що інші не помічають.
+        <br><button id="game3-next-btn">Продовжити</button>
+    </div>
+</div>
+
+<div id="screen-final" class="screen">
+    <div class="message" id="final-message"></div>
 </div>
 
 <script>
-document.getElementById('submit-btn').addEventListener('click', function() {
-    var totalScore = 0;
-    for (var i = 1; i <= 10; i++) {
-        var q = document.querySelector('input[name="q' + i + '"]:checked');
-        if (!q) {
-            alert('Будь ласка, дайте відповідь на всі питання.');
-            return;
+let selectedWord = "";
+
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+}
+
+document.getElementById('start-btn').addEventListener('click', () => {
+    initGame1();
+    showScreen('screen-game1');
+});
+
+function initGame1() {
+    const words = ['свобода','думай','опір'];
+    const word = words[Math.floor(Math.random() * words.length)];
+    selectedWord = word;
+    const gridSize = 20;
+    const grid = document.getElementById('game1-grid');
+    grid.innerHTML = '';
+    // Порожня 2D-матриця
+    const cells = [];
+    for(let i=0; i<gridSize; i++){
+        cells[i] = [];
+        for(let j=0; j<gridSize; j++){
+            cells[i][j] = '';
         }
-        totalScore += parseInt(q.value);
     }
-    var conclusion = '';
-    if (totalScore >= 15) {
-        conclusion = 'За результатами психодіагностики виявлено зразкову лояльність громадянина. Присвоєно статус «Лояльний громадянин». Рекомендовано заохочення та подальше залучення до відповідальних завдань Нового Порядку.';
-    } else if (totalScore >= 10) {
-        conclusion = 'За результатами перевірки встановлено гранично допустимий рівень лояльності. Присвоєно статус «Під наглядом». Необхідно застосувати профілактичні заходи контролю та організувати додаткові роз’яснювальні бесіди з ідеології Нового Порядку.';
-    } else if (totalScore >= 5) {
-        conclusion = 'Результати тестування виявили низький рівень лояльності. Присвоєно статус «Ідеологічно нестабільний». Підлягає додатковій перевірці та ідеологічній перевихованню.';
+    // Вибір напрямку: горизонтально або вертикально
+    const horizontal = Math.random() < 0.5;
+    if(horizontal) {
+        const row = Math.floor(Math.random() * gridSize);
+        const startCol = Math.floor(Math.random() * (gridSize - word.length));
+        for(let k=0; k<word.length; k++){
+            cells[row][startCol + k] = word[k];
+        }
     } else {
-        conclusion = 'Отримані результати оцінено як абсолютно неприйнятні. Громадянин визнається «Ворогом системи». Застосовуються суворі заходи безпеки та розшукові заходи за встановленими нормативами.';
+        const col = Math.floor(Math.random() * gridSize);
+        const startRow = Math.floor(Math.random() * (gridSize - word.length));
+        for(let k=0; k<word.length; k++){
+            cells[startRow + k][col] = word[k];
+        }
     }
-    var resultDiv = document.getElementById('result');
-    var quizDiv = document.getElementById('quiz');
-    quizDiv.style.display = 'none';
-    resultDiv.style.display = 'block';
-    resultDiv.innerHTML = '<h2>Висновок</h2>' +
-        '<p>Визначений бал лояльності: ' + totalScore + '.</p>' +
-        '<p>' + conclusion + '</p>';
+    // Заповнення сітки випадковими літерами
+    const letters = 'абвгґдеєжзиіїйклмнопрстуфхцчшщьюя';
+    for(let i=0; i<gridSize; i++){
+        const row = grid.insertRow();
+        for(let j=0; j<gridSize; j++){
+            const cell = row.insertCell();
+            let char = cells[i][j];
+            if(char === '') {
+                // Випадкова літера
+                const rnd = Math.floor(Math.random() * letters.length);
+                char = letters[rnd];
+            } else {
+                // Ця літера – частина загаданого слова
+                cell.classList.add('target');
+            }
+            cell.textContent = char;
+            cell.addEventListener('click', () => {
+                if(cell.classList.contains('target')) {
+                    document.getElementById('game1-grid-container').style.display = 'none';
+                    document.getElementById('game1-message').style.display = 'block';
+                }
+            });
+        }
+    }
+}
+
+document.getElementById('game1-next-btn').addEventListener('click', () => {
+    showScreen('screen-game2');
+    initGame2();
+});
+
+function initGame2() {
+    const container = document.getElementById('game2-emojis');
+    container.innerHTML = '';
+    document.getElementById('game2-message').style.display = 'none';
+    // Вибір емодзі-пари
+    const pairTypes = ['👁️','🔒'];
+    const pairEmoji = pairTypes[Math.floor(Math.random() * pairTypes.length)];
+    const total = Math.floor(Math.random() * 5) + 16; // від 16 до 20
+    const emojis = [];
+    emojis.push(pairEmoji);
+    emojis.push(pairEmoji);
+    // Список інших емодзі (без дублювання)
+    const pool = ['😀','😃','😄','😁','😆','😅','😂','🤣','🥲','🙂','🙃','😉','😊','😇','🥰','😍','🤩','😘','😗','😙','😚','😋','😛','😜','🤪','😝','🤓','😎','🧐','😕','😟','🙁','😮','😯','😲','😵','🤯'];
+    // Якщо пара емодзі є у списку, видаляємо одну копію (на випадок)
+    const idx = pool.indexOf(pairEmoji);
+    if(idx > -1) pool.splice(idx, 1);
+    while(emojis.length < total) {
+        const rnd = Math.floor(Math.random() * pool.length);
+        const em = pool[rnd];
+        if(!emojis.includes(em)) {
+            emojis.push(em);
+        }
+        if(emojis.length >= total) break;
+    }
+    // Перемішування емодзі
+    for(let i=emojis.length-1; i>0; i--){
+        const j = Math.floor(Math.random() * (i+1));
+        [emojis[i], emojis[j]] = [emojis[j], emojis[i]];
+    }
+    let firstSelected = null;
+    emojis.forEach(emoji => {
+        const span = document.createElement('span');
+        span.textContent = emoji;
+        container.appendChild(span);
+        span.addEventListener('click', () => {
+            if(document.getElementById('game2-message').style.display === 'block') return;
+            if(firstSelected === null) {
+                firstSelected = emoji;
+                span.style.border = '2px solid #FFDE59';
+                span.style.borderRadius = '5px';
+            } else {
+                // Другий клік
+                if(emoji === firstSelected) {
+                    document.getElementById('game2-result-text').textContent = 'Ви довели уважність.';
+                } else {
+                    document.getElementById('game2-result-text').textContent = 'Невірно, режим пильнує.';
+                }
+                document.getElementById('game2-message').style.display = 'block';
+            }
+        });
+    });
+}
+
+document.getElementById('game2-next-btn').addEventListener('click', () => {
+    showScreen('screen-game3');
+    initGame3();
+});
+
+function initGame3() {
+    const container = document.getElementById('game3-emojis');
+    container.innerHTML = '';
+    document.getElementById('game3-message').style.display = 'none';
+    const total = 30;
+    const happyIndex = Math.floor(Math.random() * total);
+    for(let i=0; i<total; i++){
+        const span = document.createElement('span');
+        span.textContent = (i === happyIndex) ? '😊' : '😐';
+        container.appendChild(span);
+        if(i === happyIndex) {
+            span.addEventListener('click', () => {
+                document.getElementById('game3-message').style.display = 'block';
+            });
+        }
+    }
+}
+
+document.getElementById('game3-next-btn').addEventListener('click', () => {
+    showScreen('screen-final');
+    let message = '';
+    if(selectedWord === 'свобода') {
+        message = 'Твоя жага до свободи вражає. Вітаємо з проходженням випробувань.';
+    } else if(selectedWord === 'думай') {
+        message = 'Твоє прагнення думати небезпечне для системи. Але саме в цьому сила. Вітаємо з проходженням випробувань.';
+    } else if(selectedWord === 'опір') {
+        message = 'Твоя здатність до опору робить тебе ворогом системи — і надією для інших. Вітаємо з проходженням випробувань.';
+    }
+    document.getElementById('final-message').textContent = message;
 });
 </script>
 </body>
