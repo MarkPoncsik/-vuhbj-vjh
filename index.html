@@ -1,298 +1,262 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Антиутопічні міні-ігри</title>
-<style>
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-}
-body {
-    background: linear-gradient(135deg, #000000, #000044, #440077);
-    background-size: cover;
-    color: #ECECEC;
-    font-family: sans-serif;
-}
-.screen {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-    padding: 20px;
-    box-sizing: border-box;
-    text-align: center;
-}
-.screen.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-h1 {
-    color: #FFDE59;
-    margin-bottom: 20px;
-}
-button {
-    background-color: #9a70f5;
-    color: #ECECEC;
-    border: 2px solid #9a70f5;
-    border-radius: 4px;
-    padding: 10px 20px;
-    font-size: 1.1em;
-    cursor: pointer;
-    margin: 5px;
-}
-button:hover {
-    background-color: #FFDE59;
-    color: #000;
-}
-#game1-grid {
-    border-collapse: collapse;
-    margin: 20px 0;
-}
-#game1-grid td {
-    width: 20px; height: 20px;
-    text-align: center;
-    vertical-align: middle;
-    border: 1px solid #333;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-}
-#game1-grid td:hover {
-    background-color: rgba(255, 222, 89, 0.2);
-}
-.emoji-grid {
-    display: grid;
-    gap: 10px;
-    justify-items: center;
-}
-.emoji-grid span {
-    font-size: 2rem;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-.emoji-grid span:hover {
-    transform: scale(1.2);
-}
-.message {
-    margin-top: 20px;
-    font-size: 1.3em;
-    color: #FFDE59;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Антиутопічна гра</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(#000000, #001144, #3a0040);
+      color: #ECECEC;
+      font-family: sans-serif;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .stage {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .stage.active {
+      opacity: 1;
+    }
+    /* Game 1 styles */
+    #game1 { display: grid; gap: 2px; }
+    #game1 .cell {
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      background: #222; cursor: pointer;
+      font-size: 14px; user-select: none;
+    }
+    #game1 .cell.found {
+      background: #9a70f5; color: black;
+    }
+    /* Game 2 styles */
+    #game2 {
+      width: 80%;
+      display: grid; gap: 10px;
+      grid-template-columns: repeat(5, 1fr);
+    }
+    .card {
+      width: 100%; padding-top: 100%; /* square */
+      position: relative;
+      cursor: pointer;
+      background: #333;
+      border-radius: 8px;
+    }
+    .card .emoji {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card.flipped .emoji { opacity: 1; }
+    .card.matched { background: #444; pointer-events: none; }
+    /* Game 3 styles */
+    #game3 {
+      width: 100%;
+      display: grid; grid-template-columns: repeat(auto-fill, 30px);
+      gap: 5px; overflow: auto; justify-content: center;
+    }
+    .emoji3 {
+      font-size: 24px;
+      cursor: pointer;
+    }
+    /* Final screen */
+    #final { padding: 20px; text-align: center; }
+    #final .highlight { color: #FFDE59; }
+  </style>
 </head>
 <body>
-<div id="screen-start" class="screen active">
-    <h1>Антиутопічні випробування</h1>
-    <button id="start-btn">Почати</button>
-</div>
-
-<div id="screen-game1" class="screen">
-    <div id="game1-grid-container">
-        <table id="game1-grid"></table>
-    </div>
-    <div id="game1-message" class="message" style="display:none;">
-        Ви знайшли заборонене слово.
-        <br><button id="game1-next-btn">Продовжити</button>
-    </div>
-</div>
-
-<div id="screen-game2" class="screen">
-    <div id="game2-grid-container">
-        <div id="game2-emojis" class="emoji-grid" style="grid-template-columns: repeat(4, 1fr);"></div>
-    </div>
-    <div id="game2-message" class="message" style="display:none;">
-        <span id="game2-result-text"></span>
-        <br><button id="game2-next-btn">Продовжити</button>
-    </div>
-</div>
-
-<div id="screen-game3" class="screen">
-    <div id="game3-grid-container">
-        <div id="game3-emojis" class="emoji-grid" style="grid-template-columns: repeat(6, 1fr);"></div>
-    </div>
-    <div id="game3-message" class="message" style="display:none;">
-        Ви побачили те, що інші не помічають.
-        <br><button id="game3-next-btn">Продовжити</button>
-    </div>
-</div>
-
-<div id="screen-final" class="screen">
-    <div class="message" id="final-message"></div>
-</div>
-
+  <!-- Гра 1 -->
+  <div id="game1Stage" class="stage active">
+    <h2>Гра 1: Знайди слово</h2>
+    <div id="game1"></div>
+  </div>
+  <!-- Гра 2 -->
+  <div id="game2Stage" class="stage">
+    <h2>Гра 2: Знайди пару емодзі</h2>
+    <div id="game2"></div>
+  </div>
+  <!-- Гра 3 -->
+  <div id="game3Stage" class="stage">
+    <h2>Гра 3: Знайди 😊</h2>
+    <div id="game3"></div>
+  </div>
+  <!-- Фінал -->
+  <div id="finalStage" class="stage">
+    <h2>Вітаємо!</h2>
+    <p id="finalText"></p>
+  </div>
 <script>
-let selectedWord = "";
+(() => {
+  let selectedWord = "";
 
-function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => {
-        s.classList.remove('active');
-    });
-    document.getElementById(id).classList.add('active');
-}
-
-document.getElementById('start-btn').addEventListener('click', () => {
-    initGame1();
-    showScreen('screen-game1');
-});
-
-function initGame1() {
-    const words = ['свобода','думай','опір'];
-    const word = words[Math.floor(Math.random() * words.length)];
-    selectedWord = word;
-    const gridSize = 20;
-    const grid = document.getElementById('game1-grid');
-    grid.innerHTML = '';
-    // Порожня 2D-матриця
-    const cells = [];
-    for(let i=0; i<gridSize; i++){
-        cells[i] = [];
-        for(let j=0; j<gridSize; j++){
-            cells[i][j] = '';
+  // --- Game 1: Word Search ---
+  const words = ["свобода","думай","опір"];
+  const size = 15;
+  const grid = Array.from({ length: size }, () => Array(size).fill(""));
+  // Place two of each word
+  function placeWord(word) {
+    const len = word.length;
+    let placed = false;
+    while (!placed) {
+      const horizontal = Math.random() < 0.5;
+      const row = Math.floor(Math.random() * size);
+      const col = Math.floor(Math.random() * size);
+      if (horizontal) {
+        if (col + len > size) continue;
+        let ok = true;
+        for (let i = 0; i < len; i++) {
+          if (grid[row][col+i] && grid[row][col+i] !== word[i]) { ok = false; break; }
         }
+        if (!ok) continue;
+        for (let i = 0; i < len; i++) {
+          grid[row][col+i] = word[i];
+        }
+        placed = true;
+      } else {
+        if (row + len > size) continue;
+        let ok = true;
+        for (let i = 0; i < len; i++) {
+          if (grid[row+i][col] && grid[row+i][col] !== word[i]) { ok = false; break; }
+        }
+        if (!ok) continue;
+        for (let i = 0; i < len; i++) {
+          grid[row+i][col] = word[i];
+        }
+        placed = true;
+      }
     }
-    // Вибір напрямку: горизонтально або вертикально
-    const horizontal = Math.random() < 0.5;
-    if(horizontal) {
-        const row = Math.floor(Math.random() * gridSize);
-        const startCol = Math.floor(Math.random() * (gridSize - word.length));
-        for(let k=0; k<word.length; k++){
-            cells[row][startCol + k] = word[k];
+  }
+  words.forEach(word => { placeWord(word); placeWord(word); });
+  // Fill empty with random letters
+  const alphabet = "абвгдеєжзиіїйклмнопрстуфхцчшщьюя";
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (!grid[r][c]) {
+        grid[r][c] = alphabet[Math.floor(Math.random()*alphabet.length)];
+      }
+    }
+  }
+  // Render grid
+  const game1Div = document.getElementById("game1");
+  game1Div.style.gridTemplateColumns = `repeat(${size}, 20px)`;
+  let currentSelection = "";
+  let cells = [];
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.textContent = grid[r][c];
+      cell.addEventListener("click", () => {
+        currentSelection += grid[r][c];
+        cell.classList.add("selected");
+        // Check if prefix of any word
+        const matchWord = words.find(w => w.startsWith(currentSelection));
+        if (!matchWord) {
+          // reset
+          currentSelection = "";
+          cells.forEach(x => x.classList.remove("selected"));
+          cells = [];
+          return;
         }
+        cells.push(cell);
+        if (currentSelection === matchWord) {
+          // Found a word
+          cells.forEach(x => x.classList.add("found"));
+          selectedWord = matchWord;
+          // Proceed to game 2
+          document.getElementById("game1Stage").classList.remove("active");
+          document.getElementById("game2Stage").classList.add("active");
+        }
+      });
+      game1Div.appendChild(cell);
+    }
+  }
+  
+  // --- Game 2: Emoji Memory ---
+  const emojis = ["🍎","🍌","🍇","🍓","🍉","🍒","🥑","🍑","🍍","🥥"];
+  let cards = emojis.concat(emojis);
+  cards.sort(() => 0.5 - Math.random());
+  const game2Div = document.getElementById("game2");
+  let firstCard = null, lock = false;
+  cards.forEach(sym => {
+    const card = document.createElement("div");
+    card.className = "card";
+    const span = document.createElement("span");
+    span.className = "emoji";
+    span.textContent = sym;
+    card.appendChild(span);
+    card.addEventListener("click", () => {
+      if (lock || card.classList.contains("flipped")) return;
+      card.classList.add("flipped");
+      if (!firstCard) {
+        firstCard = card;
+      } else {
+        lock = true;
+        const secondCard = card;
+        if (firstCard.innerText === secondCard.innerText) {
+          firstCard.classList.add("matched");
+          secondCard.classList.add("matched");
+          firstCard = null;
+          lock = false;
+          // Check if all matched
+          if (document.querySelectorAll(".card.matched").length === cards.length) {
+            document.getElementById("game2Stage").classList.remove("active");
+            document.getElementById("game3Stage").classList.add("active");
+          }
+        } else {
+          setTimeout(() => {
+            firstCard.classList.remove("flipped");
+            secondCard.classList.remove("flipped");
+            firstCard = null;
+            lock = false;
+          }, 700);
+        }
+      }
+    });
+    game2Div.appendChild(card);
+  });
+  
+  // --- Game 3: Find 😊 ---
+  const game3Div = document.getElementById("game3");
+  const totalEmojis = 120;
+  const happyIndex = Math.floor(Math.random() * totalEmojis);
+  for (let i = 0; i < totalEmojis; i++) {
+    const span = document.createElement("span");
+    span.className = "emoji3";
+    if (i === happyIndex) {
+      span.textContent = "😊";
+      span.addEventListener("click", () => {
+        // Go to final
+        document.getElementById("game3Stage").classList.remove("active");
+        document.getElementById("finalStage").classList.add("active");
+        const finalText = document.getElementById("finalText");
+        let msg = "";
+        if (selectedWord === "свобода") msg = "Твоя жага до свободи вражає. Вітаємо з проходженням випробувань.";
+        if (selectedWord === "думай") msg = "Твоє прагнення думати небезпечне для системи. Але саме в цьому сила. Вітаємо з проходженням випробувань.";
+        if (selectedWord === "опір") msg = "Твоя здатність до опору робить тебе ворогом системи — і надією для інших. Вітаємо з проходженням випробувань.";
+        finalText.innerText = msg;
+      });
     } else {
-        const col = Math.floor(Math.random() * gridSize);
-        const startRow = Math.floor(Math.random() * (gridSize - word.length));
-        for(let k=0; k<word.length; k++){
-            cells[startRow + k][col] = word[k];
-        }
+      span.textContent = "😐";
+      span.addEventListener("click", () => {
+        /* нічого не робимо */
+      });
     }
-    // Заповнення сітки випадковими літерами
-    const letters = 'абвгґдеєжзиіїйклмнопрстуфхцчшщьюя';
-    for(let i=0; i<gridSize; i++){
-        const row = grid.insertRow();
-        for(let j=0; j<gridSize; j++){
-            const cell = row.insertCell();
-            let char = cells[i][j];
-            if(char === '') {
-                // Випадкова літера
-                const rnd = Math.floor(Math.random() * letters.length);
-                char = letters[rnd];
-            } else {
-                // Ця літера – частина загаданого слова
-                cell.classList.add('target');
-            }
-            cell.textContent = char;
-            cell.addEventListener('click', () => {
-                if(cell.classList.contains('target')) {
-                    document.getElementById('game1-grid-container').style.display = 'none';
-                    document.getElementById('game1-message').style.display = 'block';
-                }
-            });
-        }
-    }
-}
-
-document.getElementById('game1-next-btn').addEventListener('click', () => {
-    showScreen('screen-game2');
-    initGame2();
-});
-
-function initGame2() {
-    const container = document.getElementById('game2-emojis');
-    container.innerHTML = '';
-    document.getElementById('game2-message').style.display = 'none';
-    // Вибір емодзі-пари
-    const pairTypes = ['👁️','🔒'];
-    const pairEmoji = pairTypes[Math.floor(Math.random() * pairTypes.length)];
-    const total = Math.floor(Math.random() * 5) + 16; // від 16 до 20
-    const emojis = [];
-    emojis.push(pairEmoji);
-    emojis.push(pairEmoji);
-    // Список інших емодзі (без дублювання)
-    const pool = ['😀','😃','😄','😁','😆','😅','😂','🤣','🥲','🙂','🙃','😉','😊','😇','🥰','😍','🤩','😘','😗','😙','😚','😋','😛','😜','🤪','😝','🤓','😎','🧐','😕','😟','🙁','😮','😯','😲','😵','🤯'];
-    // Якщо пара емодзі є у списку, видаляємо одну копію (на випадок)
-    const idx = pool.indexOf(pairEmoji);
-    if(idx > -1) pool.splice(idx, 1);
-    while(emojis.length < total) {
-        const rnd = Math.floor(Math.random() * pool.length);
-        const em = pool[rnd];
-        if(!emojis.includes(em)) {
-            emojis.push(em);
-        }
-        if(emojis.length >= total) break;
-    }
-    // Перемішування емодзі
-    for(let i=emojis.length-1; i>0; i--){
-        const j = Math.floor(Math.random() * (i+1));
-        [emojis[i], emojis[j]] = [emojis[j], emojis[i]];
-    }
-    let firstSelected = null;
-    emojis.forEach(emoji => {
-        const span = document.createElement('span');
-        span.textContent = emoji;
-        container.appendChild(span);
-        span.addEventListener('click', () => {
-            if(document.getElementById('game2-message').style.display === 'block') return;
-            if(firstSelected === null) {
-                firstSelected = emoji;
-                span.style.border = '2px solid #FFDE59';
-                span.style.borderRadius = '5px';
-            } else {
-                // Другий клік
-                if(emoji === firstSelected) {
-                    document.getElementById('game2-result-text').textContent = 'Ви довели уважність.';
-                } else {
-                    document.getElementById('game2-result-text').textContent = 'Невірно, режим пильнує.';
-                }
-                document.getElementById('game2-message').style.display = 'block';
-            }
-        });
-    });
-}
-
-document.getElementById('game2-next-btn').addEventListener('click', () => {
-    showScreen('screen-game3');
-    initGame3();
-});
-
-function initGame3() {
-    const container = document.getElementById('game3-emojis');
-    container.innerHTML = '';
-    document.getElementById('game3-message').style.display = 'none';
-    const total = 30;
-    const happyIndex = Math.floor(Math.random() * total);
-    for(let i=0; i<total; i++){
-        const span = document.createElement('span');
-        span.textContent = (i === happyIndex) ? '😊' : '😐';
-        container.appendChild(span);
-        if(i === happyIndex) {
-            span.addEventListener('click', () => {
-                document.getElementById('game3-message').style.display = 'block';
-            });
-        }
-    }
-}
-
-document.getElementById('game3-next-btn').addEventListener('click', () => {
-    showScreen('screen-final');
-    let message = '';
-    if(selectedWord === 'свобода') {
-        message = 'Твоя жага до свободи вражає. Вітаємо з проходженням випробувань.';
-    } else if(selectedWord === 'думай') {
-        message = 'Твоє прагнення думати небезпечне для системи. Але саме в цьому сила. Вітаємо з проходженням випробувань.';
-    } else if(selectedWord === 'опір') {
-        message = 'Твоя здатність до опору робить тебе ворогом системи — і надією для інших. Вітаємо з проходженням випробувань.';
-    }
-    document.getElementById('final-message').textContent = message;
-});
+    game3Div.appendChild(span);
+  }
+})();
 </script>
 </body>
 </html>
